@@ -1,10 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { data } from "./res";
+
 const App = () => {
 	const [images, setImages] = useState([]);
 	const [page, setPage] = useState(1);
+	
 	useEffect(() => {
-		console.log("page is chnaged", page);
+		console.log("page is change", page);
 		fetch(`https://api.pexels.com/v1/search/?page=${page}&per_page=15&query=people`, {
 			headers: {
 				Authorization: process.env.REACT_APP_AUTH_KEY,
@@ -15,17 +16,15 @@ const App = () => {
 				setImages([...images, ...data.photos]);
 			})
 			.catch(console.log);
-		// setImages(data.data.photos);
 	}, [page]);
 
 	const changePage = useCallback(() => {
 		setPage((page) => page + 1);
 	}, []);
 
-	const memoChildren = useMemo(() => {
-		images.map((res) => (
+	const children = useMemo(() => {
+		return images.map((res) => (
 			<React.Fragment key={res.id}>
-				{console.log("re-rendered how many tiumes")}
 				<div className="element w-[350px] h-[350px]">
 					<img src={res.src.small} data-src={res.src.large} className="rounded-lg filter blur-sm" />
 				</div>
@@ -38,7 +37,7 @@ const App = () => {
 			<div className=" h-screen">
 				{!!images.length ? (
 					<InfiniteImageLazyLoad changePage={changePage} images={images}>
-						{memoChildren}
+						{children}
 					</InfiniteImageLazyLoad>
 				) : (
 					<>
@@ -51,21 +50,15 @@ const App = () => {
 };
 
 const InfiniteImageLazyLoad = memo((props) => {
-	console.log("props.children", props.children);
 	useEffect(() => {
 		infiniteScrollObserver();
 		lazyLoadObserver();
-		return () => {
-			// observer.disconnect();
-		};
 	}, [props.images]);
 
 	const infiniteScrollObserver = () => {
 		const renderDiv = document.querySelectorAll(".element");
 		const lastrenderDiv = renderDiv[renderDiv.length - 1];
-
 		//observe the last element for the inifinte scrolling
-
 		const observer = new IntersectionObserver((entries) => {
 			// Callback to be fired
 			// Entries is a list of elements out of our targets that reported a change.
@@ -83,13 +76,10 @@ const InfiniteImageLazyLoad = memo((props) => {
 	};
 	const lazyLoadObserver = () => {
 		const renderImg = document.querySelectorAll("img[data-src]");
-
 		//observe the every image tag element for the lazy loading and progressive image
-
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				// Only add to list if element is coming into view not leaving
-
 				if (!!entry.isIntersecting) {
 					entry.target.src = entry.target.dataset.src;
 					entry.target.addEventListener("load", () => {
