@@ -3,7 +3,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 const App = () => {
 	const [images, setImages] = useState([]);
 	const [page, setPage] = useState(1);
-	
+
 	useEffect(() => {
 		console.log("page is change", page);
 		fetch(`https://api.pexels.com/v1/search/?page=${page}&per_page=15&query=people`, {
