@@ -34,6 +34,7 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
-		"react-app-rewired": "^2.2.1"
+		"react-app-rewired": "^2.2.1",
+		"click-to-react-component": "^1.0.8"
 	}
 }

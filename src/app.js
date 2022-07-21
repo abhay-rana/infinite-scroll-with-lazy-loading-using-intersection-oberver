@@ -9,7 +9,6 @@ const App = () => {
 	useTilg()`images=${images},page=${page}`;
 
 	useEffect(() => {
-		console.log("page is change", page);
 		fetch(`https://api.pexels.com/v1/search/?page=${page}&per_page=15&query=people`, {
 			headers: {
 				Authorization: process.env.REACT_APP_AUTH_KEY,
@@ -25,14 +24,9 @@ const App = () => {
 
 	const changePage = useCallback(() => {
 		setPage((page) => page + 1);
-		console.log("page is chnaged");
 	}, []);
 
-	const renderComponent = useCallback(() => {
-		return <Children images={images} />;
-	}, [images]);
-
-	console.log(renderComponent());
+	const renderComponent = useCallback(() => <Children images={images} />, [images]);
 
 	return (
 		<>
