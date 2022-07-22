@@ -1,18 +1,14 @@
 import React, { useCallback, useMemo, useState, memo, useEffect } from "react";
 
-import Parent from "./Parent";
-
 const WrapperComponent = () => {
-	const object = <Child />; //just returns the react object
-	console.log(object);
 	const [state, setState] = useState(0);
 	const render = useCallback(() => <Child />, [state]);
-	// const render_child = useMemo(() => <Child />, []);
+
 	return (
 		<>
 			<Parent child={render} />
 			<button onClick={() => setState(state + 1)} className="p-2 -2 border-red border-2">
-				Count Wrapper component plz
+				Change Count Wrapper Component
 			</button>
 		</>
 	);
@@ -20,7 +16,7 @@ const WrapperComponent = () => {
 
 const Child = (props) => {
 	const [state, setState] = useState(0);
-	// setState(count + 1);
+
 	useEffect(() => {
 		console.log("mounts child component");
 		return () => {
@@ -34,5 +30,19 @@ const Child = (props) => {
 		</>
 	);
 };
+
+const Parent = memo((props) => {
+	const [state, setState] = useState(0);
+	console.log("parent is mounted");
+	return (
+		<>
+			<div>Parent Component</div>
+			<button onClick={() => setState(state + 1)} classname="cursor-pointer p-2 bg-red-500">
+				Change Child Count
+			</button>
+			<props.child />
+		</>
+	);
+});
 
 export default WrapperComponent;
